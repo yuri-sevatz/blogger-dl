@@ -1,0 +1,3 @@
+[submodule "libtwirl"]
+	path = libtwirl
+	url = https://github.com/yuri-sevatz/libtwirl.git
