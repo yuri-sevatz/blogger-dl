@@ -19,7 +19,6 @@ find_package(Qt5 COMPONENTS Core Network WebKit WebKitWidgets Xml REQUIRED)
 
 # configuration
 
-OPTION(INSTALL_HEADERS "Copy headers to target" OFF)
 OPTION(MORE_VERBOSE "Enable more verbose output messages" OFF)
 
 CONFIGURE_FILE(${CMAKE_SOURCE_DIR}/libblogger/include/config.h.cmake ${CMAKE_SOURCE_DIR}/libblogger/include/config.h)
@@ -73,6 +72,7 @@ install(TARGETS ${PROJECT_NAME}
                 LIBRARY DESTINATION lib
                 ARCHIVE DESTINATION lib/static)
 
-IF(DEFINED INSTALL_HEADERS)
-install(DIRECTORY . DESTINATION include/lib${PROJECT_NAME} FILES_MATCHING PATTERN "*.hpp")
-ENDIF(DEFINED INSTALL_HEADERS)
+foreach(header ${${PROJECT_NAME}_pub_headers})
+	string(REGEX MATCH "(.*)[/\\]" dir ${header})
+	install(FILES ${header} DESTINATION include/lib${PROJECT_NAME}/${dir})
+endforeach(header ${${PROJECT_NAME}_pub_headers})
