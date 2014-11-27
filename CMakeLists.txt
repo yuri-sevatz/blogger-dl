@@ -4,8 +4,10 @@ project(prj)
 
 include_directories(./)
 
-add_subdirectory(libtwirl)
+OPTION(SUBMODULES "Build Submodules?" OFF)
+IF(SUBMODULES)
+	add_subdirectory(libtwirl)
+ENDIF(SUBMODULES)
+
 add_subdirectory(libblogger)
 add_subdirectory(blogger-dl)
-
-

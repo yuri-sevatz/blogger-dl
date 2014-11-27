@@ -10,7 +10,7 @@ set(VERSION_PATCH "0")
 set(VERSION "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}")
 
 # required dependencies
-find_package(Qt5 COMPONENTS Core Widgets REQUIRED)
+find_package(Qt5 COMPONENTS Core Network WebKit WebKitWidgets Widgets REQUIRED)
 
 # add your headers and source files here
 # ---------------
@@ -33,7 +33,7 @@ add_executable(${PROJECT_NAME} ${${PROJECT_NAME}_headers} ${${PROJECT_NAME}_head
 
 target_link_libraries(${PROJECT_NAME} twirl blogger)
 
-qt5_use_modules(${PROJECT_NAME} Core Widgets)
+qt5_use_modules(${PROJECT_NAME} Core Network WebKit WebKitWidgets Widgets)
 
 # Install
 # ---------------
