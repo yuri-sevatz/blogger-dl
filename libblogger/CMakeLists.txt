@@ -4,27 +4,18 @@ cmake_minimum_required(VERSION 2.8.8)
 # ---------------
 project(blogger)
 
-set(VERSION_MAJOR "0")
-set(VERSION_MINOR "1")
-set(VERSION_PATCH "0")
-set(VERSION "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}")
-
-# required dependencies
-
-set(CMAKE_MODULE_PATH
-  ${CMAKE_SOURCE_DIR}/cmake/Modules
+set(${PROJECT_NAME}_qt_modules
+    Core
+    Network
+    WebKit
+    WebKitWidgets
+    Xml
 )
 
-find_package(Qt5 COMPONENTS Core Network WebKit WebKitWidgets Xml REQUIRED)
-
-# configuration
+find_package(Qt5 COMPONENTS ${${PROJECT_NAME}_qt_modules} REQUIRED)
 
 OPTION(MORE_VERBOSE "Enable more verbose output messages" OFF)
-
 CONFIGURE_FILE(${CMAKE_SOURCE_DIR}/libblogger/include/config.h.cmake ${CMAKE_SOURCE_DIR}/libblogger/include/config.h)
-
-# add your headers and source files here
-# ---------------
 
 set(${PROJECT_NAME}_pub_headers
     client.hpp
@@ -60,17 +51,25 @@ QT5_WRAP_CPP(${PROJECT_NAME}_headers_moc ${${PROJECT_NAME}_headers})
 
 # Create the library
 # ---------------
-add_library(${PROJECT_NAME} SHARED ${${PROJECT_NAME}_headers} ${${PROJECT_NAME}_headers_moc} ${${PROJECT_NAME}_sources})
+add_library(${PROJECT_NAME} SHARED
+    ${${PROJECT_NAME}_headers}
+    ${${PROJECT_NAME}_headers_moc}
+    ${${PROJECT_NAME}_sources}
+)
 
-target_link_libraries(${PROJECT_NAME} twirl)
-qt5_use_modules(${PROJECT_NAME} Core Network WebKit WebKitWidgets Xml)
+target_link_libraries(${PROJECT_NAME}
+    twirl
+)
+
+qt5_use_modules(${PROJECT_NAME} ${${PROJECT_NAME}_qt_modules})
 
 # Install
 # ---------------
 install(TARGETS ${PROJECT_NAME}
-                RUNTIME DESTINATION bin
-                LIBRARY DESTINATION lib
-                ARCHIVE DESTINATION lib/static)
+    RUNTIME DESTINATION bin
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib/static
+)
 
 foreach(header ${${PROJECT_NAME}_pub_headers})
 	string(REGEX MATCH "(.*)[/\\]" dir ${header})
