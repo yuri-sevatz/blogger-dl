@@ -1,7 +1,7 @@
 #ifndef APP_HPP
 #define APP_HPP
 
-#include "bootstrap.hpp"
+#include <libtwirl/app/bootstrap.hpp>
 
 #include <QMap>
 #include <QString>
@@ -13,7 +13,7 @@ class QJsonArray;
 class QJsonObject;
 class QJsonValue;
 
-class App : public Bootstrap {
+class App : public twirl::Bootstrap {
 public:
     App();
     virtual ~App();

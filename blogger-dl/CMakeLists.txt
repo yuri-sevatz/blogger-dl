@@ -16,11 +16,9 @@ find_package(Qt5 COMPONENTS Core Network WebKit WebKitWidgets Widgets REQUIRED)
 # ---------------
 
 set (${PROJECT_NAME}_headers
-    bootstrap.hpp
     app.hpp
 )
 set (${PROJECT_NAME}_sources
-    bootstrap.cpp
     app.cpp
     main.cpp
 )
