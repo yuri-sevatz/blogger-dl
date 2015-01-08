@@ -1,7 +1,7 @@
 #ifndef APP_HPP
 #define APP_HPP
 
-#include <libtwirl/app/bootstrap.hpp>
+#include <libtwirl/app/boot.hpp>
 
 #include <QMap>
 #include <QString>
@@ -13,15 +13,14 @@ class QJsonArray;
 class QJsonObject;
 class QJsonValue;
 
-class App : public twirl::Bootstrap {
+class App : public twirl::Boot {
 public:
-    App();
+    App(QCoreApplication & app);
     virtual ~App();
     
     typedef QMap<QString, QString> Dictionary;
 
-protected:
-    void main();
+    int main();
     
 private:
     static QString dictArgs(const QString & output, const Dictionary & dictionary);

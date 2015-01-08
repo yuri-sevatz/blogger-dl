@@ -12,15 +12,13 @@
 
 using namespace blogger;
 
-App::App() :
+App::App(QCoreApplication & app) : Boot(app),
     qtout(stdout),
     qterr(stderr),
     qtin(stdin) {
 }
 
-App::~App() {
-
-}
+App::~App() {}
 
 void App::help(const QStringList & args) {
     qDebug() << "Blogspot Shell Script";
@@ -72,7 +70,7 @@ static inline App::Dictionary dict(
     return dictionary;
 }
 
-void App::main() {
+int App::main() {
     const QStringList args = QApplication::arguments();
     Client client;
     QUrl url;
@@ -90,7 +88,7 @@ void App::main() {
 
     if (args.size() < 2) {
         help(args);
-        return;
+        return EXIT_FAILURE;
     }
 
     for(int argi = 0; argi < args.size(); argi++) {
@@ -115,13 +113,13 @@ void App::main() {
             noisy = false;
         } else if (arg == "-h" || arg == "-help" || arg == "--help" || arg == "/?") {
             help(args);
-            return;
+            return EXIT_SUCCESS;
         }
     }
     
     if (url.isEmpty()) {
         qterr << "Please enter a url (-a)";
-        return;
+        return EXIT_FAILURE;;
     } else if (url.scheme().isEmpty()) {
         url.setScheme("http");
     }
@@ -148,7 +146,7 @@ void App::main() {
                     if (abort) {
                         qtout.flush();
                         qterr.flush();
-                        return;
+                        return EXIT_FAILURE;;
                     }
                 } else {
                     const QFileInfo src(image.fileName());
@@ -159,7 +157,7 @@ void App::main() {
                         if (abort) {
                             qtout.flush();
                             qterr.flush();
-                            return;
+                            return EXIT_FAILURE;;
                         }
                     }
                     
@@ -193,7 +191,7 @@ void App::main() {
                         if (cease) {
                             qtout.flush();
                             qterr.flush();
-                            return;
+                            return EXIT_FAILURE;;
                         }
                     } else if (write) {
                         if (dst.path().isEmpty() || QDir().mkpath(dst.path())) {
@@ -205,7 +203,7 @@ void App::main() {
                                 if (abort) {
                                     qtout.flush();
                                     qterr.flush();
-                                    return;
+                                    return EXIT_FAILURE;;
                                 }
                             } else if (noisy) {
                                 qterr << "Saved - " << dst.filePath() << "\n";
@@ -215,7 +213,7 @@ void App::main() {
                             if (abort) {
                                 qtout.flush();
                                 qterr.flush();
-                                return;
+                                return EXIT_FAILURE;;
                             }
                         }
                     } else if (noisy) {
@@ -231,6 +229,7 @@ void App::main() {
     }
     qtout.flush();
     qterr.flush();
+    return EXIT_SUCCESS;
 }
 
 inline QString App::regex(const QMap<QString, QString> & dictionary) {
